@@ -183,7 +183,7 @@ export default function Process() {
   className="h-full bg-gradient-to-r from-[#5de0e6] to-[#256ac6] rounded-full"
   style={{ 
     width: useTransform(scrollYProgress, [0, 1], ['0%', '100%']) 
-  } as React.CSSProperties}
+  }}
 />
             </div>
             <div className="flex justify-between text-sm text-gray-400">
