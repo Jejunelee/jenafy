@@ -302,7 +302,7 @@ export default function Hero() {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 sm:mb-6">
               <span className="heading-line block text-white mb-2 sm:mb-0">We Made this Website.</span>
               <span className="heading-line block gradient-text bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 bg-[length:200%_auto] bg-clip-text text-transparent mt-2 sm:mt-0">
-                We'll make yours and more.
+                We'll make yours, and more.
               </span>
             </h1>
           </div>

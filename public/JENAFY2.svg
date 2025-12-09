@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1000 1000" style="enable-background:new 0 0 1000 1000;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:url(#XMLID_6_);}
+	.st1{fill:#F1F2F2;}
+</style>
+<linearGradient id="XMLID_6_" gradientUnits="userSpaceOnUse" x1="500" y1="5.2063" x2="500" y2="994.0667">
+	<stop  offset="0" style="stop-color:#6ECBD7"/>
+	<stop  offset="0.148" style="stop-color:#65BBD0"/>
+	<stop  offset="0.2857" style="stop-color:#5CACCA"/>
+	<stop  offset="0.3198" style="stop-color:#57A6C8"/>
+	<stop  offset="0.398" style="stop-color:#4F9AC3"/>
+	<stop  offset="0.4276" style="stop-color:#4C94C0"/>
+	<stop  offset="0.4847" style="stop-color:#478DBD"/>
+	<stop  offset="0.5628" style="stop-color:#3F80B7"/>
+	<stop  offset="0.6173" style="stop-color:#3B7BB4"/>
+	<stop  offset="0.664" style="stop-color:#3371AF"/>
+	<stop  offset="0.7442" style="stop-color:#2763A9"/>
+	<stop  offset="0.8262" style="stop-color:#1F59A4"/>
+	<stop  offset="0.9103" style="stop-color:#1953A2"/>
+	<stop  offset="1" style="stop-color:#1851A1"/>
+</linearGradient>
+<path id="XMLID_1_" class="st0" d="M822,1000H178C80.1,1000,0,919.9,0,822V178C0,80.1,80.1,0,178,0h644c97.9,0,178,80.1,178,178v644
+	C1000,919.9,919.9,1000,822,1000z"/>
+<path id="XMLID_8_" class="st1" d="M480.7,164L360.6,302.7c-7.4,8.6-7.4,20.9,0,29.5L480.7,471c10,11.5,28.7,11.5,38.6,0
+	l120.1-138.7c7.4-8.6,7.4-20.9,0-29.5L519.3,164C509.4,152.5,490.6,152.5,480.7,164z"/>
+<path id="XMLID_4_" class="st1" d="M164,519.3l138.7,120.1c8.6,7.4,20.9,7.4,29.5,0L471,519.3c11.5-10,11.5-28.7,0-38.6L332.3,360.6
+	c-8.6-7.4-20.9-7.4-29.5,0L164,480.7C152.5,490.6,152.5,509.4,164,519.3z"/>
+<path id="XMLID_2_" class="st1" d="M836,480.7L697.3,360.6c-8.6-7.4-20.9-7.4-29.5,0L529,480.7c-11.5,10-11.5,28.7,0,38.6
+	l138.7,120.1c8.6,7.4,20.9,7.4,29.5,0L836,519.3C847.5,509.4,847.5,490.6,836,480.7z"/>
+<path id="XMLID_3_" class="st1" d="M480.7,836L360.6,697.3c-7.4-8.6-7.4-20.9,0-29.5L480.7,529c10-11.5,28.7-11.5,38.6,0
+	l120.1,138.7c7.4,8.6,7.4,20.9,0,29.5L519.3,836C509.4,847.5,490.6,847.5,480.7,836z"/>
+</svg>

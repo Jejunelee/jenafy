@@ -35,7 +35,7 @@ export default function Header() {
                 {/* SVG Logo */}
                 <div className="relative h-8 w-8 transition-transform duration-300 group-hover:scale-110">
                   <Image
-                    src="JENAFY.svg"
+                    src="JENAFY2.svg"
                     alt="Jenafy Logo"
                     width={32}
                     height={32}
@@ -43,8 +43,8 @@ export default function Header() {
                     priority
                   />
                 </div>
-                <span className="text-lg font-black bg-gradient-to-r from-[#5de0e6] to-[#256ac6] bg-clip-text text-transparent">
-                  JENAFY
+                <span className="text-lg font-medium bg-gradient-to-r from-[#5de0e6] to-[#256ac6] opacity-90 bg-clip-text text-transparent">
+                  │ JENAFY
                 </span>
               </Link>
               
