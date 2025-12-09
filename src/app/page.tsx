@@ -14,6 +14,7 @@ export default function Home() {
         <Clients />
         <Process />
         <Expertise />
+        <Demo />
         <Team />
         <Lead />
       </main>

@@ -7,7 +7,6 @@ import {
   Brain, 
   Sparkles, 
   Play, 
-  Code, 
   Terminal,
   Cuboid,
   Network,
@@ -16,8 +15,7 @@ import {
   ChevronRight,
   Loader2,
   CheckCircle,
-  BarChart3,
-  MessageSquare
+  BarChart3
 } from 'lucide-react';
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 
@@ -46,7 +44,6 @@ interface Message {
 interface Demo {
   id: string;
   title: string;
-  description: string;
   icon: React.ComponentType<any>;
   color: string;
   component: React.ComponentType<any>;
@@ -64,87 +61,55 @@ export default function DemoPage() {
   const [magnetActive, setMagnetActive] = useState(false);
   const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
   
-  // Floating particles for background - EXTREME ENHANCEMENT
+  // Floating particles
   const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
-    // Initialize particles with more variety
-    const initialParticles: Particle[] = Array.from({ length: 30 }).map((_, i) => ({
+    const initialParticles: Particle[] = Array.from({ length: 20 }).map((_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: Math.random() * 4 + 1,
+      size: Math.random() * 3 + 1,
       speed: Math.random() * 1.5 + 0.3,
-      color: ['#3B82F6', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444'][Math.floor(Math.random() * 5)],
+      color: ['#3B82F6', '#8B5CF6', '#10B981'][Math.floor(Math.random() * 3)],
       shape: ['circle', 'triangle', 'square'][Math.floor(Math.random() * 3)] as 'circle' | 'triangle' | 'square'
     }));
     setParticles(initialParticles);
   }, []);
 
-  // Parallax refs
-  const parallaxRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number | null>(null);
-  const lastMousePos = useRef({ x: 0, y: 0 });
-
-  // Interactive 3D card effect - EXTREMELY ENHANCED
+  // Interactive 3D card effect
   const cardX = useMotionValue(0);
   const cardY = useMotionValue(0);
-  const rotateX = useSpring(useTransform(cardY, [-200, 200], [15, -15]), {
-    stiffness: 250,
-    damping: 30,
+  const rotateX = useSpring(useTransform(cardY, [-200, 200], [10, -10]), {
+    stiffness: 200,
+    damping: 25,
     mass: 0.8
   });
-  const rotateY = useSpring(useTransform(cardX, [-200, 200], [-15, 15]), {
-    stiffness: 250,
-    damping: 30,
+  const rotateY = useSpring(useTransform(cardX, [-200, 200], [-10, 10]), {
+    stiffness: 200,
+    damping: 25,
     mass: 0.8
   });
 
-  // Enhanced mouse movement with interpolation and velocity
+  // Mouse movement
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!parallaxRef.current || rafRef.current) return;
+    const x = e.clientX;
+    const y = e.clientY;
     
-    rafRef.current = requestAnimationFrame(() => {
-      const rect = parallaxRef.current!.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      
-      // Calculate velocity for more dynamic effects
-      const deltaX = x - lastMousePos.current.x;
-      const deltaY = y - lastMousePos.current.y;
-      const velocity = Math.sqrt(deltaX * deltaX + deltaY * deltaY) * 0.1;
-      
-      // Update mouse position for parallax
-      const newMousePos = {
-        x: ((x - centerX) / centerX) * 20,
-        y: ((y - centerY) / centerY) * 20
-      };
-      setMousePosition(newMousePos);
-      
-      // For 3D card effect with velocity boost
-      cardX.set((x - centerX) / 12 + deltaX * 0.5);
-      cardY.set((y - centerY) / 12 + deltaY * 0.5);
-      
-      // Update particles based on mouse movement
-      setParticles(prev => prev.map(p => {
-        const distance = Math.sqrt(Math.pow(p.x - (x/rect.width*100), 2) + Math.pow(p.y - (y/rect.height*100), 2));
-        if (distance < 20 && magnetActive) {
-          return {
-            ...p,
-            x: p.x + (x/rect.width*100 - p.x) * 0.02,
-            y: p.y + (y/rect.height*100 - p.y) * 0.02
-          };
-        }
-        return p;
-      }));
-      
-      lastMousePos.current = { x, y };
-      rafRef.current = null;
-    });
-  }, [magnetActive]);
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    
+    // Update mouse position for parallax
+    const newMousePos = {
+      x: ((x - centerX) / centerX) * 15,
+      y: ((y - centerY) / centerY) * 15
+    };
+    setMousePosition(newMousePos);
+    
+    // For 3D card effect
+    cardX.set((x - centerX) / 20);
+    cardY.set((y - centerY) / 20);
+  }, []);
 
   // Magnetic field toggle
   useEffect(() => {
@@ -157,7 +122,7 @@ export default function DemoPage() {
     return () => window.removeEventListener('keypress', handleKeyPress);
   }, [magnetActive]);
 
-  // Website demo component with HOLY SHIT effects
+  // Website demo component
   const WebsiteDemo = useMemo(() => {
     const DemoComponent = ({ mousePos }: { mousePos: MousePosition }) => {
       const floatingRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -251,8 +216,8 @@ export default function DemoPage() {
             ))}
           </div>
 
-          {/* HOLY SHIT Parallax Scrolling */}
-          <div className="relative h-64 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900 border-2 border-gray-800">
+          {/* Parallax Scrolling */}
+          <div className="relative h-64 rounded-2xl overflow-hidden border-2 border-gray-800">
             <div className="absolute inset-0">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 animate-gradient-x" />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.4),transparent_70%)]" />
@@ -309,12 +274,12 @@ export default function DemoPage() {
             ))}
           </div>
 
-          {/* Interactive Elements with EXTREME feedback */}
+          {/* Interactive Elements */}
           <div className="grid grid-cols-3 gap-3">
             {['Button One', 'Button Two', 'Button Three'].map((text, i) => (
               <motion.button
                 key={i}
-                className="bg-gradient-to-br from-gray-800 to-gray-900 border-2 border-gray-700 rounded-xl p-4 text-sm font-bold uppercase tracking-wider relative overflow-hidden group"
+                className="border-2 border-gray-700 rounded-xl p-4 text-sm font-bold uppercase tracking-wider relative overflow-hidden group backdrop-blur-sm"
                 whileHover={{ 
                   scale: 1.15,
                   rotate: i === 1 ? [0, -3, 3, -3, 0] : 0,
@@ -360,7 +325,7 @@ export default function DemoPage() {
     return DemoComponent;
   }, []);
 
-  // Automation Demo - EXTREMELY ENHANCED
+  // Automation Demo
   const AutomationDemo = useMemo(() => {
     const DemoComponent = () => {
       const [tasks, setTasks] = useState<Task[]>([
@@ -376,7 +341,6 @@ export default function DemoPage() {
         setIsLoading(true);
         setAutomationStatus('running');
         
-        // Enhanced automation with particle effects
         let completed = 0;
         const interval = setInterval(() => {
           setTasks(prev => prev.map(task => 
@@ -386,14 +350,12 @@ export default function DemoPage() {
           ));
           
           setTimeout(() => {
-            // HOLY SHIT completion effect
             setTasks(prev => prev.map(task => 
               task.id === completed + 1 
                 ? { ...task, status: 'completed' }
                 : task
             ));
             
-            // Visual feedback
             if (document.getElementById(`task-${completed + 1}`)) {
               const el = document.getElementById(`task-${completed + 1}`);
               if (el) {
@@ -413,7 +375,6 @@ export default function DemoPage() {
               setIsLoading(false);
               setAutomationStatus('completed');
               
-              // Epic celebration effect
               const celebration = () => {
                 for (let i = 0; i < 20; i++) {
                   setTimeout(() => {
@@ -441,7 +402,6 @@ export default function DemoPage() {
               };
               celebration();
               
-              // Reset after 5 seconds
               setTimeout(() => {
                 setTasks(prev => prev.map(task => ({ ...task, status: 'pending' })));
                 setAutomationStatus('idle');
@@ -453,7 +413,7 @@ export default function DemoPage() {
 
       return (
         <div className="space-y-6">
-          <div className="bg-gradient-to-br from-gray-900/60 to-black/60 rounded-3xl p-8 border-2 border-gray-800 relative overflow-hidden">
+          <div className="rounded-3xl p-8 border-2 border-gray-800 relative overflow-hidden backdrop-blur-sm">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 animate-gradient-x" />
             
             <div className="flex items-center justify-between mb-6 relative z-10">
@@ -462,10 +422,10 @@ export default function DemoPage() {
                 <p className="text-gray-400">Run workflows that'll blow your mind</p>
               </div>
               <motion.div
-                className={`px-4 py-2 rounded-full text-sm font-semibold border-2 ${
-                  automationStatus === 'idle' ? 'bg-gray-800/50 text-gray-300 border-gray-700' :
-                  automationStatus === 'running' ? 'bg-blue-500/20 text-blue-300 border-blue-500/50 animate-pulse' :
-                  'bg-green-500/20 text-green-300 border-green-500/50'
+                className={`px-4 py-2 rounded-full text-sm font-semibold border-2 backdrop-blur-sm ${
+                  automationStatus === 'idle' ? 'text-gray-300 border-gray-700' :
+                  automationStatus === 'running' ? 'text-blue-300 border-blue-500/50 animate-pulse' :
+                  'text-green-300 border-green-500/50'
                 }`}
                 animate={automationStatus === 'completed' ? {
                   scale: [1, 1.1, 1],
@@ -481,7 +441,7 @@ export default function DemoPage() {
                 <motion.div
                   key={task.id}
                   id={`task-${task.id}`}
-                  className="flex items-center justify-between p-4 bg-gray-800/30 rounded-xl border border-gray-700/50 backdrop-blur-sm group hover:bg-gray-800/50 hover:border-gray-600 transition-all"
+                  className="flex items-center justify-between p-4 rounded-xl border border-gray-700/50 backdrop-blur-sm group hover:border-gray-600 transition-all"
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.15, type: "spring" }}
@@ -508,7 +468,7 @@ export default function DemoPage() {
                   </div>
                   <div className="flex items-center gap-6">
                     <motion.div
-                      className="px-3 py-1 bg-gray-900/50 rounded-lg text-gray-300 font-mono"
+                      className="px-3 py-1 rounded-lg text-gray-300 font-mono backdrop-blur-sm"
                       whileHover={{ scale: 1.1 }}
                     >
                       {task.time}
@@ -555,10 +515,10 @@ export default function DemoPage() {
             </div>
           </div>
 
-          {/* Feature cards with HOLY SHIT effects */}
+          {/* Feature cards */}
           <div className="grid grid-cols-2 gap-6">
             <motion.div
-              className="bg-gradient-to-br from-gray-900/40 to-black/40 p-6 rounded-2xl border border-gray-800 relative overflow-hidden group cursor-pointer"
+              className="p-6 rounded-2xl border border-gray-800 relative overflow-hidden group cursor-pointer backdrop-blur-sm"
               whileHover={{ scale: 1.05, y: -5 }}
               transition={{ type: "spring" }}
             >
@@ -566,21 +526,10 @@ export default function DemoPage() {
               <Terminal className="w-10 h-10 text-green-400 mb-4 group-hover:scale-110 group-hover:rotate-12 transition-transform" />
               <h4 className="font-bold text-white mb-2">API Integration</h4>
               <p className="text-sm text-gray-400">Connect with 1000+ services</p>
-              <motion.div
-                className="absolute -right-4 -top-4 w-20 h-20 bg-green-500/10 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"
-                animate={{
-                  rotate: [0, 360],
-                  scale: [1, 1.2, 1]
-                }}
-                transition={{
-                  rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-                  scale: { duration: 3, repeat: Infinity }
-                }}
-              />
             </motion.div>
             
             <motion.div
-              className="bg-gradient-to-br from-gray-900/40 to-black/40 p-6 rounded-2xl border border-gray-800 relative overflow-hidden group cursor-pointer"
+              className="p-6 rounded-2xl border border-gray-800 relative overflow-hidden group cursor-pointer backdrop-blur-sm"
               whileHover={{ scale: 1.05, y: -5 }}
               transition={{ type: "spring" }}
             >
@@ -588,17 +537,6 @@ export default function DemoPage() {
               <Cloud className="w-10 h-10 text-blue-400 mb-4 group-hover:scale-110 group-hover:-rotate-12 transition-transform" />
               <h4 className="font-bold text-white mb-2">Cloud Sync</h4>
               <p className="text-sm text-gray-400">Real-time quantum data sync</p>
-              <motion.div
-                className="absolute -right-4 -top-4 w-20 h-20 bg-blue-500/10 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500"
-                animate={{
-                  rotate: [360, 0],
-                  scale: [1.2, 1, 1.2]
-                }}
-                transition={{
-                  rotate: { duration: 25, repeat: Infinity, ease: "linear" },
-                  scale: { duration: 4, repeat: Infinity }
-                }}
-              />
             </motion.div>
           </div>
         </div>
@@ -625,7 +563,6 @@ export default function DemoPage() {
         setInput('');
         setIsTyping(true);
 
-        // Simulate AI response
         setTimeout(() => {
           const responses = [
             "I've analyzed your request and here are the insights... Based on the data patterns, I recommend focusing on user engagement metrics first.",
@@ -645,7 +582,7 @@ export default function DemoPage() {
 
       return (
         <div className="space-y-6">
-          <div className="bg-gradient-to-br from-gray-900/50 to-black/50 rounded-2xl p-4 border-2 border-gray-800 h-64 overflow-y-auto relative">
+          <div className="rounded-2xl p-4 border-2 border-gray-800 h-64 overflow-y-auto relative backdrop-blur-sm">
             <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-emerald-500/5" />
             <div className="relative z-10">
               {messages.map((msg, i) => (
@@ -659,7 +596,7 @@ export default function DemoPage() {
                   <div className={`inline-block max-w-[80%] p-4 rounded-2xl backdrop-blur-sm ${
                     msg.role === 'user' 
                       ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-100 rounded-tr-none border border-blue-500/30' 
-                      : 'bg-gradient-to-r from-gray-800/50 to-gray-900/50 text-gray-100 rounded-tl-none border border-gray-700/50'
+                      : 'text-gray-100 rounded-tl-none border border-gray-700/50'
                   }`}>
                     {msg.content.split('\n').map((line, idx) => (
                       <p key={idx} className={idx > 0 ? 'mt-2' : ''}>
@@ -686,7 +623,7 @@ export default function DemoPage() {
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
               placeholder="Ask me anything..."
-              className="flex-1 bg-gray-800/50 border-2 border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 backdrop-blur-sm"
+              className="flex-1 border-2 border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 backdrop-blur-sm"
               disabled={isTyping}
             />
             <motion.button
@@ -707,7 +644,7 @@ export default function DemoPage() {
               <motion.button
                 key={i}
                 onClick={() => setInput(action)}
-                className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 border-2 border-gray-700 rounded-lg p-3 text-sm text-gray-300 hover:text-white hover:bg-gray-800/50 transition-colors backdrop-blur-sm group"
+                className="border-2 border-gray-700 rounded-lg p-3 text-sm text-gray-300 hover:text-white transition-colors backdrop-blur-sm group"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
@@ -740,7 +677,7 @@ export default function DemoPage() {
 
       return (
         <div className="space-y-6">
-          <div className="bg-gradient-to-br from-gray-900/50 to-black/50 rounded-3xl p-6 border-2 border-gray-800 relative overflow-hidden">
+          <div className="rounded-3xl p-6 border-2 border-gray-800 relative overflow-hidden backdrop-blur-sm">
             <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 via-yellow-500/5 to-amber-500/5" />
             
             <div className="flex items-center justify-between mb-6 relative z-10">
@@ -753,7 +690,7 @@ export default function DemoPage() {
                     className={`px-4 py-2 rounded-full text-sm font-medium capitalize backdrop-blur-sm ${
                       activeDataset === dataset
                         ? 'bg-gradient-to-r from-orange-500 to-yellow-500 text-white shadow-lg shadow-orange-500/30'
-                        : 'bg-gray-800/50 text-gray-400 hover:bg-gray-700/50 border border-gray-700'
+                        : 'text-gray-400 hover:bg-gray-700/50 border border-gray-700'
                     }`}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -793,7 +730,7 @@ export default function DemoPage() {
                       repeat: Infinity
                     }}
                   >
-                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 px-3 py-1 rounded-lg text-sm font-bold text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-gray-700">
+                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 px-3 py-1 rounded-lg text-sm font-bold text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-gray-700 backdrop-blur-sm">
                       {value.toLocaleString()}
                     </div>
                   </motion.div>
@@ -804,19 +741,19 @@ export default function DemoPage() {
           </div>
 
           <div className="grid grid-cols-3 gap-6">
-            <div className="bg-gradient-to-br from-gray-900/40 to-black/40 p-5 rounded-2xl border border-gray-800 text-center backdrop-blur-sm">
+            <div className="p-5 rounded-2xl border border-gray-800 text-center backdrop-blur-sm">
               <div className="text-3xl font-bold text-white mb-1">
                 {datasets[activeDataset].reduce((a, b) => a + b, 0).toLocaleString()}
               </div>
               <div className="text-sm text-gray-400 font-medium">Total</div>
             </div>
-            <div className="bg-gradient-to-br from-gray-900/40 to-black/40 p-5 rounded-2xl border border-gray-800 text-center backdrop-blur-sm">
+            <div className="p-5 rounded-2xl border border-gray-800 text-center backdrop-blur-sm">
               <div className="text-3xl font-bold text-white mb-1">
                 {Math.max(...datasets[activeDataset]).toLocaleString()}
               </div>
               <div className="text-sm text-gray-400 font-medium">Peak</div>
             </div>
-            <div className="bg-gradient-to-br from-gray-900/40 to-black/40 p-5 rounded-2xl border border-gray-800 text-center backdrop-blur-sm">
+            <div className="p-5 rounded-2xl border border-gray-800 text-center backdrop-blur-sm">
               <div className="text-3xl font-bold text-white mb-1">
                 {(datasets[activeDataset].reduce((a, b) => a + b, 0) / datasets[activeDataset].length).toFixed(0)}
               </div>
@@ -829,7 +766,7 @@ export default function DemoPage() {
             {datasets[activeDataset].map((value, i) => (
               <motion.div
                 key={i}
-                className="flex items-center gap-3 px-4 py-3 bg-gradient-to-br from-gray-800/40 to-gray-900/40 rounded-xl border border-gray-700 cursor-pointer backdrop-blur-sm group"
+                className="flex items-center gap-3 px-4 py-3 rounded-xl border border-gray-700 cursor-pointer backdrop-blur-sm group"
                 whileHover={{ scale: 1.05, y: -3 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
@@ -858,32 +795,28 @@ export default function DemoPage() {
   const demos: Demo[] = [
     {
       id: 'website',
-      title: 'Interactive Website',
-      description: 'Floating elements, parallax scrolling, and HOLY SHIT animations',
+      title: 'Make it Interactive',
       icon: Globe,
       color: 'from-blue-500 to-cyan-400',
       component: WebsiteDemo
     },
     {
       id: 'automation',
-      title: 'Smart Automation',
-      description: 'Schedule tasks, run workflows, and watch magic happen',
+      title: 'Make it Automated',
       icon: Zap,
       color: 'from-purple-500 to-pink-500',
       component: AutomationDemo
     },
     {
       id: 'ai',
-      title: 'AI Assistant',
-      description: 'Intelligent chatbot with mind-blowing conversation',
+      title: 'Integrate AI',
       icon: Brain,
       color: 'from-green-500 to-emerald-400',
       component: AIDemo
     },
     {
       id: 'dataviz',
-      title: 'Data Visualization',
-      description: 'Interactive charts that will blow your mind',
+      title: 'Yassify Data',
       icon: BarChart3,
       color: 'from-orange-500 to-yellow-500',
       component: DataVizDemo
@@ -894,16 +827,12 @@ export default function DemoPage() {
 
   return (
     <div 
-      ref={parallaxRef}
-      className="min-h-screen text-white p-4 md:p-8 overflow-hidden relative"
+      className="text-white p-4 md:p-8"
       onMouseMove={handleMouseMove}
     >
-      {/* HOLY SHIT Background Effects - Only effects remain, no solid background */}
+      {/* Simplified background effects */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {/* Animated gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5 animate-gradient-x" />
-        
-        {/* Particles with extreme effects */}
+        {/* Particles */}
         {particles.map(particle => (
           <motion.div
             key={particle.id}
@@ -916,144 +845,82 @@ export default function DemoPage() {
               top: `${particle.y}%`,
               width: particle.size * 2,
               height: particle.size * 2,
-              background: `radial-gradient(circle, ${particle.color}40, ${particle.color}20, transparent 70%)`,
+              background: `radial-gradient(circle, ${particle.color}20, ${particle.color}10, transparent 70%)`,
               filter: `blur(${particle.size/2}px)`
             }}
             animate={{
-              y: [0, -40, 0],
-              x: [0, Math.sin(particle.id) * 30, 0],
-              rotate: [0, 360],
-              scale: [1, 1.5, 1]
+              y: [0, -20, 0],
+              x: [0, Math.sin(particle.id) * 15, 0]
             }}
             transition={{
-              duration: particle.speed * 6,
+              duration: particle.speed * 8,
               repeat: Infinity,
-              ease: "easeInOut",
-              rotate: {
-                duration: particle.speed * 20,
-                repeat: Infinity,
-                ease: "linear"
-              }
+              ease: "easeInOut"
             }}
           />
         ))}
-        
-        {/* WebGL-like grid */}
-        <div className="absolute inset-0 opacity-[0.02]">
-          {Array.from({ length: 50 }).map((_, i) => (
-            <div key={i} className="absolute h-px w-full bg-gradient-to-r from-transparent via-blue-500 to-transparent"
-              style={{ top: `${i * 4}%`, opacity: 0.5 + Math.sin(i) * 0.5 }} />
-          ))}
-          {Array.from({ length: 50 }).map((_, i) => (
-            <div key={i} className="absolute w-px h-full bg-gradient-to-b from-transparent via-purple-500 to-transparent"
-              style={{ left: `${i * 4}%`, opacity: 0.5 + Math.cos(i) * 0.5 }} />
-          ))}
-        </div>
       </div>
 
       {/* Magnetic Field Indicator */}
       {magnetActive && (
         <motion.div
-          className="fixed top-4 right-4 z-50 px-4 py-2 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-bold flex items-center gap-2"
+          className="fixed top-4 right-4 z-50 px-4 py-2 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-bold flex items-center gap-2 backdrop-blur-sm"
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -50, opacity: 0 }}
         >
           <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-          MAGNETIC FIELD ACTIVE
+          MAGNETIC FIELD
         </motion.div>
       )}
 
-      {/* Header with HOLY SHIT effects */}
-      <motion.header
-        className="relative z-10 max-w-6xl mx-auto mb-16 text-center"
-        initial={{ opacity: 0, y: -40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, type: "spring" }}
-      >
+      {/* Simplified Header */}
+      <header className="relative z-10 max-w-6xl mx-auto mb-10 text-center">
         <motion.div
-          className="text-xl md:text-3xl font-bold mb-6"
-          animate={{
-            textShadow: [
-              '0 0 20px rgba(59, 130, 246, 0.5)',
-              '0 0 40px rgba(139, 92, 246, 0.7)',
-              '0 0 20px rgba(59, 130, 246, 0.5)'
-            ]
-          }}
-          transition={{ duration: 2, repeat: Infinity }}
+          className="text-2xl md:text-4xl font-bold mb-4"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
         >
-          <motion.span
-            className="block bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent"
-          >
-            We take pride in breaking boundaries
-          </motion.span>
+          <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent">
+            Breaking boundaries. Click to see.
+          </span>
         </motion.div>
-      </motion.header>
+      </header>
 
-      {/* Demo Cards Grid with EXTREME 3D */}
+      {/* Demo Cards Grid - Simplified */}
       <div className="relative z-10 max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {demos.map((demo, index) => (
             <motion.div
               key={demo.id}
-              initial={{ opacity: 0, y: 60, rotateY: -45 }}
-              animate={{ opacity: 1, y: 0, rotateY: 0 }}
-              transition={{ delay: index * 0.2 + 0.3, type: "spring", stiffness: 100 }}
-              whileHover={{ y: -10, transition: { type: "spring", stiffness: 300 } }}
-              className="group cursor-pointer perspective-1000"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ y: -5 }}
+              className="group cursor-pointer"
               onClick={() => setActiveDemo(demo.id)}
             >
-              <motion.div
-                className="relative bg-gradient-to-br from-gray-900/60 to-black/60 backdrop-blur-xl rounded-3xl p-8 border-2 border-gray-800 overflow-hidden transform-style-preserve-3d"
-                style={{
-                  rotateX,
-                  rotateY,
-                  transformStyle: 'preserve-3d'
-                }}
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 200, damping: 25 }}
-              >
-                {/* 3D depth effect */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${demo.color} opacity-10 blur-3xl group-hover:opacity-20 transition-opacity`} />
-                <div className="absolute -inset-1 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 blur-xl transition-opacity" />
-                
-                <div className="relative z-10 transform-style-preserve-3d">
-                  <div className="flex items-start justify-between mb-6 transform-z-20">
-                    <motion.div
-                      className={`p-4 rounded-2xl bg-gradient-to-br ${demo.color} shadow-2xl shadow-current/20`}
-                      whileHover={{ rotate: 180 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <demo.icon className="w-8 h-8" />
-                    </motion.div>
-                    <motion.div
-                      className="transform-z-10"
-                      animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >
-                      <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-white group-hover:scale-150 transition-all" />
-                    </motion.div>
+              <div className="relative rounded-2xl p-6 border-2 border-gray-800 backdrop-blur-sm transition-all hover:border-blue-500/50">
+                <div className="flex items-start justify-between mb-4">
+                  <div className={`p-3 rounded-xl bg-gradient-to-br ${demo.color}`}>
+                    <demo.icon className="w-6 h-6" />
                   </div>
-                  
-                  <h3 className="text-2xl font-bold text-white mb-3 transform-z-10 group-hover:scale-105 transition-transform">
-                    {demo.title}
-                  </h3>
-                  <p className="text-gray-400 mb-6 transform-z-5">{demo.description}</p>
-                  
-                  <motion.div
-                    className="flex items-center text-blue-400 font-medium transform-z-0"
-                    whileHover={{ x: 10 }}
-                  >
-                    <Play className="w-5 h-5 mr-3 animate-pulse" />
-                    <span className="group-hover:underline">EXPERIENCE THE MAGIC →</span>
-                  </motion.div>
+                  <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
                 </div>
-              </motion.div>
+                <h3 className="text-xl font-bold text-white mb-2">
+                  {demo.title}
+                </h3>
+                <div className="flex items-center text-blue-400 font-medium">
+                  <Play className="w-4 h-4 mr-2" />
+                  <span>View Demo →</span>
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Active Demo Modal */}
+        {/* Active Demo Modal - KEEP FULL DETAILS */}
         <AnimatePresence mode="wait">
           {activeDemo && activeDemoData && (
             <motion.div
@@ -1064,15 +931,15 @@ export default function DemoPage() {
               onClick={() => setActiveDemo(null)}
             >
               <motion.div
-                className="bg-gradient-to-br from-gray-900 to-black w-full max-w-3xl max-h-[90vh] rounded-3xl border-2 border-gray-800 overflow-hidden shadow-2xl shadow-blue-500/20"
+                className="w-full max-w-3xl max-h-[90vh] rounded-3xl border-2 border-gray-800 overflow-hidden shadow-2xl shadow-blue-500/20 backdrop-blur-xl"
                 onClick={(e) => e.stopPropagation()}
                 initial={{ y: 100, opacity: 0, scale: 0.9 }}
                 animate={{ y: 0, opacity: 1, scale: 1 }}
                 exit={{ y: 100, opacity: 0, scale: 0.9 }}
                 transition={{ type: "spring", damping: 30, stiffness: 200 }}
               >
-                {/* Modal header with extreme effects */}
-                <div className="relative p-8 border-b border-gray-800 bg-gradient-to-r from-gray-900/50 via-black/50 to-gray-900/50">
+                {/* Modal header with effects */}
+                <div className="relative p-8 border-b border-gray-800">
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10" />
                   <div className="flex items-center justify-between relative z-10">
                     <div className="flex items-center gap-4">
@@ -1087,9 +954,6 @@ export default function DemoPage() {
                         <h3 className="text-3xl font-bold text-white">
                           {activeDemoData.title}
                         </h3>
-                        <p className="text-gray-400">
-                          {activeDemoData.description}
-                        </p>
                       </div>
                     </div>
                     <motion.button
@@ -1116,7 +980,7 @@ export default function DemoPage() {
         </AnimatePresence>
       </div>
 
-      {/* Add custom styles for extreme effects */}
+      {/* Custom styles */}
       <style jsx global>{`
         @keyframes gradient-x {
           0%, 100% { background-position: 0% 50%; }
@@ -1137,23 +1001,6 @@ export default function DemoPage() {
         
         .clip-triangle {
           clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-        }
-        
-        .perspective-1000 {
-          perspective: 1000px;
-        }
-        
-        .transform-style-preserve-3d {
-          transform-style: preserve-3d;
-        }
-        
-        .transform-z-0 { transform: translateZ(0px); }
-        .transform-z-5 { transform: translateZ(5px); }
-        .transform-z-10 { transform: translateZ(10px); }
-        .transform-z-20 { transform: translateZ(20px); }
-        
-        .shadow-current\/20 {
-          box-shadow: 0 10px 30px -5px currentColor;
         }
       `}</style>
     </div>
