@@ -276,7 +276,7 @@ export default function DemoPage() {
 
           {/* Interactive Elements */}
           <div className="grid grid-cols-3 gap-3">
-            {['Button One', 'Button Two', 'Button Three'].map((text, i) => (
+            {[].map((text, i) => (
               <motion.button
                 key={i}
                 className="border-2 border-gray-700 rounded-xl p-4 text-sm font-bold uppercase tracking-wider relative overflow-hidden group backdrop-blur-sm"
@@ -795,28 +795,28 @@ export default function DemoPage() {
   const demos: Demo[] = [
     {
       id: 'website',
-      title: 'Make it Interactive',
+      title: 'Interactive',
       icon: Globe,
       color: 'from-blue-500 to-cyan-400',
       component: WebsiteDemo
     },
     {
       id: 'automation',
-      title: 'Make it Automated',
+      title: 'Automated',
       icon: Zap,
       color: 'from-purple-500 to-pink-500',
       component: AutomationDemo
     },
     {
       id: 'ai',
-      title: 'Integrate AI',
+      title: 'AI Integrated',
       icon: Brain,
       color: 'from-green-500 to-emerald-400',
       component: AIDemo
     },
     {
       id: 'dataviz',
-      title: 'Yassify Data',
+      title: 'Beautified',
       icon: BarChart3,
       color: 'from-orange-500 to-yellow-500',
       component: DataVizDemo
@@ -901,7 +901,7 @@ export default function DemoPage() {
               className="group cursor-pointer"
               onClick={() => setActiveDemo(demo.id)}
             >
-              <div className="relative rounded-2xl p-6 border-2 border-gray-800 backdrop-blur-sm transition-all hover:border-blue-500/50">
+              <div className="relative rounded-3xl p-5 border-2 border-gray-800 backdrop-blur-sm transition-all hover:border-blue-500/50">
                 <div className="flex items-start justify-between mb-4">
                   <div className={`p-3 rounded-xl bg-gradient-to-br ${demo.color}`}>
                     <demo.icon className="w-6 h-6" />
