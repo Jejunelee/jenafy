@@ -10,7 +10,7 @@ export default function Footer() {
             <span className="hidden sm:inline">•</span>
             <span className="flex items-center gap-1">
               <div className="h-2 w-2 rounded-full bg-green-500" />
-              System Status: Operational
+              System Status: Operational!
             </span>
           </div>
           <div className="flex items-center gap-6">
