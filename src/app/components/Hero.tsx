@@ -15,26 +15,19 @@ export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
-  const buttonsRef = useRef<(HTMLButtonElement | null)[]>([]);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const pastWorkRef = useRef<HTMLParagraphElement>(null);
   const particlesRef = useRef<(HTMLDivElement | null)[]>([]);
-  const [loadingStates, setLoadingStates] = useState<boolean[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   
-  // Initialize loading states
-  useLayoutEffect(() => {
-    setLoadingStates(Array(3).fill(false));
-  }, []);
-
-  const handleButtonClick = async (index: number, url: string) => {
+  const handleButtonClick = async () => {
     // Prevent multiple clicks
-    if (loadingStates[index]) return;
+    if (isLoading) return;
     
     // Update loading state
-    const newLoadingStates = [...loadingStates];
-    newLoadingStates[index] = true;
-    setLoadingStates(newLoadingStates);
+    setIsLoading(true);
     
-    const button = buttonsRef.current[index];
+    const button = buttonRef.current;
     if (!button) return;
     
     // Reset any existing animations
@@ -60,21 +53,14 @@ export default function Hero() {
             duration: 0.1,
             delay: 0.1,
             onComplete: () => {
-              // Navigate to the page
-              router.push(url);
+              // Navigate to the portfolio page
+              router.push("/portfolio");
             }
           });
         }
       });
     }
   };
-
-  // Button URLs (you can customize these)
-  const buttonUrls = [
-    "/websites-demo",
-    "/ai-automation-demo",
-    "/analytics-demo"
-  ];
 
   useLayoutEffect(() => {
     // Skip animations on mobile for better performance
@@ -138,9 +124,9 @@ export default function Hero() {
         }
       );
 
-      // Staggered button animation (simpler on mobile)
+      // Button animation (simpler on mobile)
       gsap.fromTo(
-        buttonsRef.current,
+        buttonRef.current,
         {
           scale: 0,
           opacity: 0,
@@ -151,7 +137,6 @@ export default function Hero() {
           opacity: 1,
           y: 0,
           duration: isMobile ? 0.5 : 0.7,
-          stagger: isMobile ? 0.1 : 0.15,
           delay: isMobile ? 0.6 : 1.2,
           ease: isMobile ? "power2.out" : "elastic.out(1, 0.5)",
         }
@@ -175,49 +160,42 @@ export default function Hero() {
 
       // Button hover animations (only on non-touch devices)
       if (!isMobile && !('ontouchstart' in window)) {
-        const buttonCleanups: (() => void)[] = [];
+        const button = buttonRef.current;
+        if (!button) return;
         
-        buttonsRef.current.forEach((button) => {
-          if (!button) return;
-          
-          const handleMouseEnter = () => {
-            // Only animate if not loading
-            if (!button.classList.contains('loading')) {
-              gsap.to(button, {
-                scale: 1.08,
-                duration: 0.3,
-                ease: "power2.out",
-                y: -4,
-                boxShadow: "0 20px 40px rgba(100, 100, 100, 0.3)",
-              });
-            }
-          };
+        const handleMouseEnter = () => {
+          // Only animate if not loading
+          if (!button.classList.contains('loading')) {
+            gsap.to(button, {
+              scale: 1.08,
+              duration: 0.3,
+              ease: "power2.out",
+              y: -4,
+              boxShadow: "0 20px 40px rgba(100, 100, 100, 0.3)",
+            });
+          }
+        };
 
-          const handleMouseLeave = () => {
-            // Only animate if not loading
-            if (!button.classList.contains('loading')) {
-              gsap.to(button, {
-                scale: 1,
-                duration: 0.4,
-                ease: "power2.out",
-                y: 0,
-                boxShadow: "0 10px 20px rgba(100, 100, 100, 0.2)",
-              });
-            }
-          };
+        const handleMouseLeave = () => {
+          // Only animate if not loading
+          if (!button.classList.contains('loading')) {
+            gsap.to(button, {
+              scale: 1,
+              duration: 0.4,
+              ease: "power2.out",
+              y: 0,
+              boxShadow: "0 10px 20px rgba(100, 100, 100, 0.2)",
+            });
+          }
+        };
 
-          button.addEventListener("mouseenter", handleMouseEnter);
-          button.addEventListener("mouseleave", handleMouseLeave);
-          
-          buttonCleanups.push(() => {
-            button.removeEventListener("mouseenter", handleMouseEnter);
-            button.removeEventListener("mouseleave", handleMouseLeave);
-          });
-        });
-
+        button.addEventListener("mouseenter", handleMouseEnter);
+        button.addEventListener("mouseleave", handleMouseLeave);
+        
         // Cleanup event listeners
         return () => {
-          buttonCleanups.forEach(cleanup => cleanup());
+          button.removeEventListener("mouseenter", handleMouseEnter);
+          button.removeEventListener("mouseleave", handleMouseLeave);
         };
       }
 
@@ -252,11 +230,6 @@ export default function Hero() {
   // Function to add ref to particles array
   const addParticleRef = (el: HTMLDivElement | null, index: number) => {
     particlesRef.current[index] = el;
-  };
-
-  // Function to add ref to buttons array
-  const addButtonRef = (el: HTMLButtonElement | null, index: number) => {
-    buttonsRef.current[index] = el;
   };
 
   return (
@@ -314,47 +287,44 @@ export default function Hero() {
             We solve your painpoints with tailored solutions for automation, conversion, and accessibility.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-2 sm:px-0">
-            {["Websites", "Automation & AI", "Site Analytics"].map((text, index) => (
-              <button
-                key={text}
-                ref={el => addButtonRef(el, index)}
-                onClick={() => handleButtonClick(index, buttonUrls[index])}
-                disabled={loadingStates[index]}
-                className={`relative px-6 sm:px-8 py-2.5 sm:py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-medium rounded-full text-base sm:text-lg overflow-hidden group shadow-lg hover:shadow-gray-500/30 transition-all duration-300 active:scale-95 ${
-                  loadingStates[index] ? 'cursor-not-allowed loading' : ''
-                }`}
-                style={{
-                  boxShadow: "0 10px 20px rgba(100, 100, 100, 0.2)",
-                }}
-              >
-                {/* Progress bar overlay */}
-                <div className="button-progress absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-500 opacity-0 w-0 rounded-full transition-all duration-300" />
-                
-                {/* Button content */}
-                <span className="relative z-10 flex items-center justify-center gap-1.5 sm:gap-2">
-                  {loadingStates[index] ? (
-                    <>
-                      Loading
-                      <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                      </svg>
-                    </>
-                  ) : (
-                    <>
-                      {text}
-                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
-                    </>
-                  )}
-                </span>
-              </button>
-            ))}
+          <div className="flex justify-center px-2 sm:px-0">
+            <button
+              ref={buttonRef}
+              onClick={handleButtonClick}
+              disabled={isLoading}
+              className={`relative px-8 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-medium rounded-full text-lg sm:text-xl overflow-hidden group shadow-lg hover:shadow-gray-500/30 transition-all duration-300 active:scale-95 ${
+                isLoading ? 'cursor-not-allowed loading' : ''
+              }`}
+              style={{
+                boxShadow: "0 10px 20px rgba(100, 100, 100, 0.2)",
+              }}
+            >
+              {/* Progress bar overlay */}
+              <div className="button-progress absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-500 opacity-0 w-0 rounded-full transition-all duration-300" />
+              
+              {/* Button content */}
+              <span className="relative z-10 flex items-center justify-center gap-2 sm:gap-3">
+                {isLoading ? (
+                  <>
+                    Loading
+                    <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                  </>
+                ) : (
+                  <>
+                    Download Our Portfolio
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </>
+                )}
+              </span>
+            </button>
           </div>
 
-          {/* "Our past work" text below buttons */}
+          {/* "Our past work" text below button */}
           <p 
             ref={pastWorkRef}
             className="mt-4 text-xs sm:text-sm text-gray-500 font-medium tracking-wide"

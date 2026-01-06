@@ -8,7 +8,7 @@ export default function Team() {
     {
       name: 'Jay Lee',
       role: 'Co-Founder & Head Developer',
-      description: 'Former tech lead with 10+ years experience in product development and scaling startups. Passionate about building transformative technology that solves real-world problems.',
+      description: 'Jay is a seasoned technology professional with seven years of industry experience. He previously served as Chief Operating Officer of PlayCash, a fintech platform, where he helped scale operations and align technology with business strategy. As a full-stack developer, his expertise centers on building and integrating robust APIs, as well as developing and optimizing CRM and ERP systems to support efficient, data-driven operations.',
       src: '/team/jay.png',
       width: 400,
       height: 400,
@@ -17,7 +17,7 @@ export default function Team() {
     {
       name: 'Bianca Arevalo',
       role: 'Co-Founder & Head Designer',
-      description: 'Expert in AI/ML systems with a PhD in Computer Science from Stanford. Focused on creating intuitive solutions through cutting-edge research and development.',
+      description: 'Bianca is a graphic design professional with over six years of industry experience. She began her career in apparel design before transitioning into the corporate space, where she led design and marketing initiatives for brands such as Lyon, Yuki, Cravings, and the Center for Culinary Arts Manila. She is highly proficient in Figma, Adobe Photoshop, Adobe Illustrator, and Canva, with a strong focus on brand consistency and visual storytelling.',
       src: '/team/bianca.png',
       width: 400,
       height: 400,

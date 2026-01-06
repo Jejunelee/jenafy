@@ -206,6 +206,11 @@ export default function Lead() {
     buttonsRef.current[index] = el;
   };
 
+  // Function to open Calendly in a new tab
+  const handleBookMeeting = () => {
+    window.open("https://calendly.com/jenafydevelopment/30min", "_blank", "noopener,noreferrer");
+  };
+
   return (
     <section 
       ref={leadRef} 
@@ -262,7 +267,8 @@ export default function Lead() {
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <button
               ref={el => addButtonRef(el, 0)}
-              className="relative px-10 py-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-full text-lg sm:text-xl overflow-hidden group shadow-lg hover:shadow-blue-500/30 transition-shadow duration-300"
+              onClick={handleBookMeeting}
+              className="relative px-10 py-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-full text-lg sm:text-xl overflow-hidden group shadow-lg hover:shadow-blue-500/30 transition-shadow duration-300 cursor-pointer"
               style={{
                 boxShadow: "0 10px 30px rgba(0, 123, 255, 0.25)",
               }}
@@ -279,6 +285,7 @@ export default function Lead() {
             </button>
             
             <Link
+              ref={seePricingRef}
               href="/pricing"
               className="text-blue-400 hover:text-blue-300 font-medium text-lg sm:text-xl hover:underline underline-offset-4 transition-all duration-300 hover:scale-105"
             >
