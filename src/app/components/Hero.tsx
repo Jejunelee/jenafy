@@ -283,7 +283,7 @@ export default function Hero() {
       <div className="absolute bottom-1/4 right-1/4 w-48 h-48 sm:w-96 sm:h-96 bg-cyan-500/5 rounded-full blur-xl sm:blur-3xl" />
 
       <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-32 lg:pt-40 pb-12 sm:pb-16 lg:pb-24">
-        <div className="max-w-3xl mx-auto text-center px-2 sm:px-0">
+        <div className="max-w-3xl mx-auto text-center px-2 sm:px-0 ">
           <div ref={headingRef}>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4 sm:mb-6">
               <span className="heading-line block text-white mb-2 sm:mb-0">We Made this Website.</span>
